@@ -28,8 +28,6 @@ var takePicture = camera.capture();
 
 ambient.on('ready', function () {
 
-
-
   // Set a sound level trigger
   // The trigger is a float between 0 and 1
   ambient.setSoundTrigger(0.3);
@@ -41,31 +39,8 @@ ambient.on('ready', function () {
   })
   ambient.on('sound-trigger', function (data) {
     console.log("Something happened with sound: ", data);
-    servo.on('ready', function () {
-      var position = 0;  //  Target position of the servo between 0 (min) and 1 (max).
 
-      //  Set the minimum and maximum duty cycle for servo 1.
-      //  If the servo doesn't move to its full extent or stalls out
-      //  and gets hot, try tuning these values (0.05 and 0.12).
-      //  Moving them towards each other = less movement range
-      //  Moving them apart = more range, more likely to stall and burn out
-      servo.configure(servo1, 0.05, 0.12, function () {
-        setInterval(function () {
-          console.log('Position (in range 0-1):', position);
-          //  Set servo #1 to position pos.
-          servo.move(servo1, position);
-
-          // Increment by 10% (~18 deg for a normal servo)
-          position += 0.1;
-          if (position > 1) {
-            position = 0; // Reset servo position
-          }
-        }, 500); // Every 500 milliseconds
-      });
-    });
-    request.post("https://maker.ifttt.com/trigger/sound_triggered/with/key/g6xaWCpgElFxswo7Iv3Iw33XLkkWSWZ4xes_ymK1LaR"), {
-      "Value1": ""
-    };
+    request.post("https://maker.ifttt.com/trigger/sound_triggered/with/key/g6xaWCpgElFxswo7Iv3Iw33XLkkWSWZ4xes_ymK1LaR")
     // Clear it
     ambient.clearSoundTrigger();
 
@@ -76,6 +51,22 @@ ambient.on('ready', function () {
 
     }, 3500);
 
+  });
+});
+servo.on('ready', function () {
+  var position = 0;  //  Target position of the servo between 0 (min) and 1 (max).
+
+  servo.configure(servo1, 0.05, 0.12, function () {
+    setInterval(function () {
+      console.log('Position (in range 0-1):', position);
+      //  Set servo #1 to position pos.
+      servo.move(servo1, position);
+      // Increment by 10% (~18 deg for a normal servo)
+      
+      if (position < 1) {
+       position += 0.1; // Reset servo position
+      }
+    }, 500); // Every 500 milliseconds
   });
 });
 
