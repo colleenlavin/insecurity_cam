@@ -1,12 +1,5 @@
 // Any copyright is dedicated to the Public Domain.
 // http://creativecommons.org/publicdomain/zero/1.0/
-
-/*********************************************
-This ambient module example console.logs
-ambient light and sound levels and whenever a
-specified light or sound level trigger is met.
-*********************************************/
-
 var tessel = require('tessel');
 var ambientlib = require('ambient-attx4'); // Replace '../' with 'ambient-attx4' in your own code
 
@@ -29,27 +22,27 @@ var takePicture = camera.capture();
 ambient.on('ready', function () {
 
   // Set a sound level trigger
-  // The trigger is a float between 0 and 1
+
   ambient.setSoundTrigger(0.3);
 
-  console.log('Waiting for a bright light or a sound...');
+  console.log('So peaceful...');
 
   takePicture.on('data', function (image) {
     console.log(image);
   })
   ambient.on('sound-trigger', function (data) {
-    console.log("Something happened with sound: ", data);
+    console.log("Keep it down in here! ", data);
 
     request.post("https://maker.ifttt.com/trigger/sound_triggered/with/key/g6xaWCpgElFxswo7Iv3Iw33XLkkWSWZ4xes_ymK1LaR")
     // Clear it
     ambient.clearSoundTrigger();
 
-    //After 1.5 seconds reset sound trigger
+    //After 4.5 seconds reset sound trigger
     setTimeout(function () {
 
       ambient.setSoundTrigger(0.3);
 
-    }, 3500);
+    }, 4500);
 
   });
 });
